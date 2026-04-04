@@ -1,12 +1,13 @@
 from manim import *
 from manim_voiceover import VoiceoverScene
-from manim_voiceover.services.gtts import GTTSService
+from kokoro_mv import KokoroService
 import numpy as np
 import random
 
 class FullAnimationPAT(VoiceoverScene):
     def construct(self):
-        self.set_speech_service(GTTSService(lang="en", tld="us"))
+        # self.set_speech_service(GTTSService(lang="en", tld="us"))
+        self.set_speech_service(KokoroService(voice="af_heart", lang="en-us"))
 
         #######################################################################################################
         # Scene 1
@@ -34,7 +35,7 @@ class FullAnimationPAT(VoiceoverScene):
             Dot(color=YELLOW).move_to(tissue.get_center() + UP*0.8),
             Dot(color=MAROON).move_to(tissue.get_center() + LEFT*0.3 + DOWN*0.8),
         )
-        abs_label = Text("Optical Absorbers", font_size=18).next_to(absorbers, UP, buff=0.5)
+        abs_label = Text("Optical Absorbers", font_size=36).scale(0.5).next_to(absorbers, UP, buff=0.5)
         
         with self.voiceover(text="First, we look at the biological tissue containing some targets to be identified.") as tracker:
             self.play(Create(tissue), Write(tissue_label))
@@ -172,7 +173,7 @@ class FullAnimationPAT(VoiceoverScene):
             font_size=36
         ).shift(LEFT * 0.2 + DOWN*0.2)
         
-        with self.voiceover(text="When photons are absorbed by the tissue, the energy is transformed into heat. We denote it by H, which represents the heat source density. It is the product of the absorption coefficient and the optical fluence. The fluence is the angular integral of the solution to RTE. The heat source acts as the source for the second part of the model.") as tracker:
+        with self.voiceover(text="When photons are absorbed by the tissue, the energy is transformed into heat. We denote it by H, which represents the heat source density. It is the product of the absorption coefficient and the optical fluence. The fluence is the angular integral of the solution to RTE. ") as tracker:
             self.play(
                 rte_group.animate.scale(1).to_edge(UP + LEFT, buff=0.5),
                 run_time=2
@@ -209,7 +210,10 @@ class FullAnimationPAT(VoiceoverScene):
 
         wave_group = VGroup(wave_title, wave_eq, wave_desc).arrange(DOWN, buff=0.4).to_edge(LEFT+DOWN*1.2, buff=0.5)
 
-        with self.voiceover(text="The wave equation. It describes how the resulting ultrasound pressure waves propagate through the body.") as tracker:
+        self.wait(1)
+        
+        with self.voiceover(text="The heat source acts as the source for the second part of the model: the wave equation. It describes how the resulting ultrasound pressure waves propagate through the body.") as tracker:
+            self.wait(2)
             self.play(FadeIn(wave_group))
             self.wait(2)
 
@@ -217,8 +221,10 @@ class FullAnimationPAT(VoiceoverScene):
         link_arrow1 = CurvedArrow(rte_group[1].get_right(), coupling_eq.get_top(), color=RED, angle=-TAU/4)
         link_arrow2 = CurvedArrow(coupling_eq.get_bottom(), wave_eq.get_right(), color=RED, angle=-TAU/4)
         source_term_box = SurroundingRectangle(wave_eq[0][-10:], color=RED)
-        source_label = Text("Initial Pressure Source", font_size=18, color=RED).next_to(source_term_box, RIGHT)
+        source_label = Text("Initial Pressure Source", font_size=36, color=RED).scale(0.5).next_to(source_term_box, RIGHT)
 
+        self.wait(1)
+        
         with self.voiceover(text="The absorbed energy from the RTE becomes the heat source. Then the heat source becomes the initial pressure for the wave equation, linking optics and acoustics into a single modality.") as tracker:
             self.play(Create(link_arrow1))
             self.wait(1.5)
@@ -372,6 +378,8 @@ class FullAnimationPAT(VoiceoverScene):
         math_p0 = MathTex("p_0(\\mathbf{r}) = \\Gamma  \\mu_a(\\mathbf{r}) \\Phi(\\mathbf{r})", font_size=34)
         math_p0.shift(RIGHT * 3 + UP * 1.5)
 
+        self.wait(1)
+        
         with self.voiceover(text="This value is proportional to a product of the absorption coefficient and the local light fluence, making the individual components ambiguous.") as tracker:
             self.play(Write(math_p0))
 
@@ -407,9 +415,12 @@ class FullAnimationPAT(VoiceoverScene):
         # Optical Inversion Step
         step2_text = MathTex("\\text{Optical Inverse Problem: } p_0 \\rightarrow \\mu_a", font_size=34, color=YELLOW).next_to(math_p0, DOWN*1.5)
 
-        with self.voiceover(text=" By solving the optical inverse problem, we can reconstruct the absorption coefficient Mu-A from the initial pressure field P-zero.") as tracker:
+        self.wait(1)
+        
+        with self.voiceover(text=" By solving the optical inverse problem, we can reconstruct the absorption coefficient (μ-'A')  from the initial pressure field P-zero.") as tracker:
             self.play(Write(step2_text))
-
+        
+        self.wait(1)
         with self.voiceover(text="This distinguishes targets by their optical properties, allowing us to accurately identify the tumor cells based on its higher absorption properties.") as tracker:
             self.play(
                 healthy_vessel.animate.set_color(RED_E),

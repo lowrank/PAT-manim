@@ -1,0 +1,5 @@
+manim
+manim-voiceover[gtts]
+kokoro-mv
+numpy
+matplotlib

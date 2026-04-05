@@ -1,6 +1,9 @@
 # Manim generated media
 media/
 
+# materials
+materials/
+
 # prelude music
 *.mp3
 

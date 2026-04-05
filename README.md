@@ -7,5 +7,6 @@ Current list of topics in the video list:
 1. Photoacoustic Tomography 
 2. Gaussian Correlation Inequality
 3. Sum of Squares
+4. Sensitivity Conjecture
 
 To run the scripts, the installation of manim is required (Follow the [instructions](https://docs.manim.community/en/stable/installation/conda.html)). 

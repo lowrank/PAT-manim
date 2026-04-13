@@ -41,6 +41,7 @@ class FullAnimationPAT(VoiceoverScene):
             self.play(Create(tissue), Write(tissue_label))
             self.play(FadeIn(absorbers))
 
+        self.wait(1)
         # Spectrum setup
         spectrum = VGroup(
             Text("Visible", font_size=40).scale(0.45).shift(LEFT*1.8 + DOWN*0.3),
@@ -77,6 +78,8 @@ class FullAnimationPAT(VoiceoverScene):
             self.play(*flashes)
             self.play(*flashes)
 
+        self.wait(1)
+
         # Detectors
         detectors = VGroup()
         center = tissue.get_center()
@@ -112,7 +115,7 @@ class FullAnimationPAT(VoiceoverScene):
                 Write(det_label), 
                 run_time=tracker.duration)
 
-
+        self.wait(1)
 
         with self.voiceover(text="Finally, the detectors capture these waves as they propagate, allowing for image reconstruction.") as tracker:
             self.play(
@@ -145,10 +148,10 @@ class FullAnimationPAT(VoiceoverScene):
         rte_group = VGroup(
             Text("Photon Transport: RTE", font_size=28, color=YELLOW),
             MathTex(
-                "\\frac{1}{c} \\frac{\\partial \\phi }{\\partial t} + \\hat{\\Omega} \\cdot \\nabla \\phi  + (\\mu_a + \\mu_s) \\phi = \\mu_s \\int_{4\\pi} p(\\hat{\\Omega}', \\hat{\\Omega}) \\phi (\\mathbf{r}, \\hat{\\Omega}', t) d\\hat{\\Omega}'",
+                "\\frac{1}{c} \\frac{\\partial u }{\\partial t} + \\mathbf{v} \\cdot \\nabla u  + (\\mu_a + \\mu_s) u = \\mu_s \\int_{4\\pi} p(\\mathbf{v}', \\mathbf{v}) u (\\mathbf{x}, \\mathbf{v}', t) d\\mathbf{v}'",
                 font_size=34
             ),
-            Text("Describes light scattering and absorption in tissue.", font_size=40).scale(0.5)
+            MathTex("\\text{Describes light scattering and absorption in tissue, }c\\text{ is light speed.}", font_size=40).scale(0.5)
         ).arrange(DOWN, buff=0.4).shift(UP*0.5)
 
         with self.voiceover(text="The first part of the model is the Radiative Transport Equation. It describes how photons travel, scatter, and are absorbed within biological tissue.") as tracker:
@@ -157,7 +160,7 @@ class FullAnimationPAT(VoiceoverScene):
 
         # 2. The Coupling Equation: Absorbed Energy Density
         coupling_eq = MathTex(
-            "H(\\mathbf{r}, t) = \\mu_a(\\mathbf{r}) \\Phi(\\mathbf{r}, t)",
+            "H(\\mathbf{x}, t) = \\mu_a(\\mathbf{x}) \\mathsf{U}(\\mathbf{x}, t)",
             color=RED,
             font_size=36
         ).shift(UP*0.2)
@@ -168,7 +171,7 @@ class FullAnimationPAT(VoiceoverScene):
                                 coupling_eq).arrange(DOWN, buff=0.4)
 
         flu_eq = MathTex(
-            "\\Phi(\\mathbf{r}, t) = \\int_{4\\pi} \\phi(\\mathbf{r}, \\hat{\\Omega}, t) d\\hat{\\Omega}",
+            "\\mathsf{U}(\\mathbf{x}, t) = \\int_{4\\pi} u(\\mathbf{x}, \\mathbf{v}, t) d\\mathbf{v}",
             color=ORANGE,
             font_size=36
         ).shift(LEFT * 0.2 + DOWN*0.2)
@@ -203,10 +206,10 @@ class FullAnimationPAT(VoiceoverScene):
         # 2. Acoustic Wave Equation
         wave_title = Text("Ultrasound: Wave Equation", font_size=28, color=BLUE)
         wave_eq = MathTex(
-            "\\left( \\nabla^2 - \\frac{1}{v_s^2} \\frac{\\partial^2}{\\partial t^2} \\right) p(\\mathbf{r}, t) = -\\frac{\\beta}{C_p} \\frac{\\partial H(\\mathbf{r}, t)}{\\partial t}",
+            "\\left( \\nabla^2 - \\frac{1}{v_s^2} \\frac{\\partial^2}{\\partial t^2} \\right) p(\\mathbf{x}, t) = -\\frac{\\beta}{C_p} \\frac{\\partial H(\\mathbf{x}, t)}{\\partial t}",
             font_size=34
         )
-        wave_desc = Text("Describes the propagation of pressure waves to the surface.", font_size=40).scale(0.5)
+        wave_desc = MathTex("\\text{Describes the propagation of pressure waves to the surface, }v_s\\text{ is the sound speed.}", font_size=40).scale(0.5)
 
         wave_group = VGroup(wave_title, wave_eq, wave_desc).arrange(DOWN, buff=0.4).to_edge(LEFT+DOWN*1.2, buff=0.5)
 
@@ -288,6 +291,8 @@ class FullAnimationPAT(VoiceoverScene):
         with self.voiceover(text="The reconstruction process begins with the recorded ultrasound data. These signals were captured by the detector array at the surface.") as tracker:
             self.play(*blinking_anims, run_time=tracker.duration)
 
+        self.wait(1)
+
         # Speed Comparison Visualization
         speed_comp = VGroup(
             Text("Light Speed", font_size=40, color=YELLOW).scale(0.5),
@@ -326,6 +331,8 @@ class FullAnimationPAT(VoiceoverScene):
                 *[w.animate.scale(25).move_to(tissue.get_center()).set_style(stroke_opacity=0) for w in back_waves],
                 run_time=tracker.duration * 0.8
             )
+
+        self.wait(1)
 
         p0_label = MathTex("p_0(\\mathbf{r})", font_size=36, color=RED).next_to(ips, RIGHT)
 
@@ -436,7 +443,7 @@ class FullAnimationPAT(VoiceoverScene):
             new_t_label = MathTex("\\text{High } \\mu_a", font_size=28, color=WHITE).next_to(tumor_target, DOWN, buff=0.1)
             self.play(Write(new_h_label), Write(new_t_label))
 
-        self.wait(3)        
+        self.wait(3)
 
         self.clear()
 
